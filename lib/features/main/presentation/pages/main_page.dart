@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../character/presentation/widgets/characters_content.dart';
+import '../../../character/presentation/pages/characters_page.dart';
+import '../../../character/presentation/pages/favorite_characters_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,8 +14,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const CharactersContent(),
-    const Center(child: Text('Search Screen', style: TextStyle(fontSize: 24))),
+    const CharactersPage(),
+    const FavoriteCharactersPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,7 +32,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('BottomNavigationBar Example')),
+      appBar: AppBar(title: const Text('RickPedia')),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const [
@@ -47,7 +48,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber,
         onTap: _onItemTapped,
         selectedFontSize: 12,
       ),

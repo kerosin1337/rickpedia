@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 ColorScheme _colorScheme = ColorScheme.fromSeed(
-  seedColor: Colors.black,
+  seedColor: const Color(0xff97ce4c),
   brightness: Brightness.dark,
-  dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
+  dynamicSchemeVariant: DynamicSchemeVariant.fruitSalad,
 );
 
 ThemeData theme = ThemeData(

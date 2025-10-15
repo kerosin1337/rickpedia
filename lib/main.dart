@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Rickpedia',
+        title: 'RickPedia',
         debugShowCheckedModeBanner: false,
         theme: theme,
         home: const MainPage(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'character_enum.dart';
 
 class CharacterModel {
@@ -45,6 +47,21 @@ class CharacterModel {
       created: DateTime.parse(map['created']),
     );
   }
+
+  String toJson() => jsonEncode({
+    'id': id,
+    'name': name,
+    'status': status.status,
+    'species': species,
+    'type': type,
+    'gender': gender.gender,
+    'origin': origin.toJson(),
+    'location': location.toJson(),
+    'image': image,
+    'episode': episode,
+    'url': url,
+    'created': created.toIso8601String(),
+  });
 }
 
 class CharacterLocationMeta {
@@ -56,4 +73,6 @@ class CharacterLocationMeta {
   factory CharacterLocationMeta.fromMap(Map<String, dynamic> map) {
     return CharacterLocationMeta(name: map['name'], url: map['url']);
   }
+
+  String toJson() => jsonEncode({'name': name, 'url': url});
 }
