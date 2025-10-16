@@ -19,14 +19,13 @@ class _CharactersPageState extends State<CharactersPage> {
   void initState() {
     super.initState();
     characterBloc = context.read<CharacterBloc>();
-    characterBloc.add(CharactersGetEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        characterBloc.add(CharactersGetEvent());
+        characterBloc.add(CharactersGetEvent(initial: true));
       },
       child: BlocBuilder<CharacterBloc, CharacterState>(
         builder: (context, state) {

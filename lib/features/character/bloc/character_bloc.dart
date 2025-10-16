@@ -18,6 +18,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     on<FavoriteCharactersAddEvent>(_onFavoriteCharactersAdd);
     on<FavoriteCharactersRemoveEvent>(_onFavoriteCharactersRemove);
     on<FavoriteCharactersGetAllEvent>(_onFavoriteCharactersGetAll);
+    on<FavoriteCharactersChangeSortEvent>(_onFavoriteCharactersChangeSort);
   }
 
   Future<void> _onCharactersGet(
@@ -25,10 +26,14 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     Emitter<CharacterState> emit,
   ) async {
     try {
+      if (event.initial) {
+        emit(state.copyWith(status: BlocStatus.initial));
+      }
+
       final characters = await characterRepository.getCharacters();
-      add(FavoriteCharactersGetAllEvent());
 
       emit(state.copyWith(status: BlocStatus.success, items: characters));
+      add(FavoriteCharactersGetAllEvent());
     } catch (_) {
       emit(state.copyWith(status: BlocStatus.failure));
     }
@@ -59,11 +64,14 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   ) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final keys = prefs.getKeys();
-    final favorites = keys
-        .map(
-          (key) => CharacterModel.fromJson(jsonDecode(prefs.getString(key)!)),
-        )
-        .toList();
+    final favorites =
+        keys
+            .map(
+              (key) =>
+                  CharacterModel.fromJson(jsonDecode(prefs.getString(key)!)),
+            )
+            .toList()
+          ..sort((a, b) => state.favoriteDirection * a.name.compareTo(b.name));
     emit(
       state.copyWith(
         favoriteItems: favorites,
@@ -75,5 +83,13 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
             .toList(),
       ),
     );
+  }
+
+  Future<void> _onFavoriteCharactersChangeSort(
+    FavoriteCharactersChangeSortEvent event,
+    Emitter<CharacterState> emit,
+  ) async {
+    emit(state.copyWith(favoriteDirection: -state.favoriteDirection));
+    add(FavoriteCharactersGetAllEvent());
   }
 }

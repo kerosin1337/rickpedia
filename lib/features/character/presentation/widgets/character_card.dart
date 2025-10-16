@@ -51,6 +51,7 @@ class _CharacterCardState extends State<CharacterCard> {
                         ),
                 );
               },
+              visualDensity: VisualDensity.comfortable,
               iconSize: 32,
               icon: Icon(
                 character.isFavorite ? Icons.star : Icons.star_outline,

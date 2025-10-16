@@ -5,7 +5,9 @@ abstract class CharacterEvent {
 }
 
 class CharactersGetEvent extends CharacterEvent {
-  CharactersGetEvent();
+  final bool initial;
+
+  CharactersGetEvent({this.initial = false});
 }
 
 class FavoriteCharactersAddEvent extends CharacterEvent {
@@ -23,4 +25,8 @@ class FavoriteCharactersRemoveEvent extends CharacterEvent {
 
 class FavoriteCharactersGetAllEvent extends CharacterEvent {
   FavoriteCharactersGetAllEvent();
+}
+
+class FavoriteCharactersChangeSortEvent extends CharacterEvent {
+  FavoriteCharactersChangeSortEvent();
 }
