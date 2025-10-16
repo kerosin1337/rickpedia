@@ -17,8 +17,7 @@ ThemeData theme = ThemeData(
         }
         return null;
       }),
-      padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+      visualDensity: const VisualDensity(horizontal: -4),
     ),
   ),
 );

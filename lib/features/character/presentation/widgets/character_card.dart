@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/extension/context_ext.dart';
-import '../../../../core/services/shared_pref.dart';
 import '../../../../shared/components/network_image_with_placeholder.dart';
+import '../../bloc/character_bloc.dart';
 import '../../data/models/character_model.dart';
 import 'character_info.dart';
 
@@ -16,18 +17,14 @@ class CharacterCard extends StatefulWidget {
 }
 
 class _CharacterCardState extends State<CharacterCard> {
-  bool isFavorite = false;
+  late final CharacterBloc characterBloc;
 
   CharacterModel get character => widget.character;
 
   @override
   void initState() {
     super.initState();
-    SharedPref.containsKey(character.id.toString()).then((constrained) {
-      setState(() {
-        isFavorite = constrained;
-      });
-    });
+    characterBloc = context.read<CharacterBloc>();
   }
 
   @override
@@ -39,28 +36,24 @@ class _CharacterCardState extends State<CharacterCard> {
         children: [
           NetworkImageWithPlaceholder(imageUrl: character.image),
           Positioned(
-            right: 16,
-            top: 16,
+            right: 8,
+            top: 8,
             child: IconButton(
               onPressed: () async {
-                final constrained = await SharedPref.containsKey(
-                  character.id.toString(),
+                characterBloc.add(
+                  character.isFavorite
+                      ? FavoriteCharactersRemoveEvent(
+                          key: character.id.toString(),
+                        )
+                      : FavoriteCharactersAddEvent(
+                          key: character.id.toString(),
+                          value: character.toJson(),
+                        ),
                 );
-                if (constrained) {
-                  await SharedPref.remove(character.id.toString());
-                } else {
-                  await SharedPref.write(
-                    character.id.toString(),
-                    character.toJson(),
-                  );
-                }
-                setState(() {
-                  isFavorite = !constrained;
-                });
               },
               iconSize: 32,
               icon: Icon(
-                isFavorite ? Icons.star : Icons.star_outline,
+                character.isFavorite ? Icons.star : Icons.star_outline,
                 shadows: [
                   Shadow(
                     offset: const Offset(1, 1),

@@ -49,29 +49,13 @@ class _Placeholder extends StatelessWidget {
                   onPressed: onRefresh?.call,
                   icon: const Icon(Icons.replay, size: 48),
                 ),
-                Text(
+                const Text(
                   'Error loading the image, please try again',
-                  // style: context.typography.body14Regular.copyWith(
-                  //   color: context.colors.secondaryTextAndIcon,
-                  // ),
                   textAlign: TextAlign.center,
                 ),
               ],
             )
-          : Container(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                padding: const EdgeInsets.symmetric(vertical: 48),
-                value: value,
-                strokeWidth: 5,
-                constraints: const BoxConstraints(
-                  maxHeight: 48,
-                  maxWidth: 48,
-                  minWidth: 48,
-                  minHeight: 48,
-                ),
-              ),
-            ),
+          : Center(child: CircularProgressIndicator(value: value)),
     );
   }
 }

@@ -14,8 +14,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const CharactersPage(),
-    const FavoriteCharactersPage(),
+    const CharactersPage(key: ValueKey(1)),
+    const FavoriteCharactersPage(key: ValueKey(2)),
   ];
 
   void _onItemTapped(int index) {

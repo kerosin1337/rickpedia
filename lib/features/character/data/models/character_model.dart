@@ -16,6 +16,8 @@ class CharacterModel {
   final String url;
   final DateTime created;
 
+  bool isFavorite;
+
   CharacterModel({
     required this.id,
     required this.name,
@@ -29,6 +31,7 @@ class CharacterModel {
     required this.episode,
     required this.url,
     required this.created,
+    this.isFavorite = false,
   });
 
   factory CharacterModel.fromMap(Map<String, dynamic> map) {
@@ -45,6 +48,24 @@ class CharacterModel {
       episode: List<String>.from(map['episode']),
       url: map['url'],
       created: DateTime.parse(map['created']),
+    );
+  }
+
+  factory CharacterModel.fromJson(Map<String, dynamic> map) {
+    return CharacterModel(
+      id: map['id'],
+      name: map['name'],
+      status: CharacterStatus.fromString(map['status']),
+      species: map['species'],
+      type: map['type'],
+      gender: CharacterGender.fromString(map['gender']),
+      origin: CharacterLocationMeta.fromMap(jsonDecode(map['origin'])),
+      location: CharacterLocationMeta.fromMap(jsonDecode(map['location'])),
+      image: map['image'],
+      episode: List<String>.from(map['episode']),
+      url: map['url'],
+      created: DateTime.parse(map['created']),
+      isFavorite: true,
     );
   }
 
