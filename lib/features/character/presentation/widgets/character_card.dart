@@ -29,17 +29,6 @@ class _CharacterCardState extends State<CharacterCard> {
     characterBloc = context.read<CharacterBloc>();
   }
 
-  void handleFavorite() {
-    characterBloc.add(
-      character.isFavorite
-          ? FavoriteCharactersRemoveEvent(key: character.id.toString())
-          : FavoriteCharactersAddEvent(
-              key: character.id.toString(),
-              value: character.toJson(),
-            ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -72,6 +61,17 @@ class _CharacterCardState extends State<CharacterCard> {
           ),
         ],
       ),
+    );
+  }
+
+  void handleFavorite() {
+    characterBloc.add(
+      character.isFavorite
+          ? FavoriteCharactersRemoveEvent(key: character.id.toString())
+          : FavoriteCharactersAddEvent(
+              key: character.id.toString(),
+              value: character.toJson(),
+            ),
     );
   }
 }

@@ -20,10 +20,6 @@ class _FavoriteSortButtonState extends State<FavoriteSortButton> {
     characterBloc = context.read<CharacterBloc>();
   }
 
-  void handleChangeDirection() {
-    characterBloc.add(FavoriteCharactersChangeSortEvent());
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,5 +38,9 @@ class _FavoriteSortButtonState extends State<FavoriteSortButton> {
         },
       ),
     );
+  }
+
+  void handleChangeDirection() {
+    characterBloc.add(FavoriteCharactersChangeSortEvent());
   }
 }

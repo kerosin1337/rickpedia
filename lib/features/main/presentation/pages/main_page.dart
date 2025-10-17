@@ -24,12 +24,6 @@ class _MainPageState extends State<MainPage> {
     const FavoriteCharactersPage(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -67,9 +61,15 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: selectedIndex,
-        onTap: _onItemTapped,
+        onTap: onItemTapped,
         selectedFontSize: 12,
       ),
     );
+  }
+
+  void onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
   }
 }

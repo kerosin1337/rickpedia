@@ -58,15 +58,6 @@ class _CharacterFavoriteIconState extends State<CharacterFavoriteIcon>
     super.dispose();
   }
 
-  void handleFavorite() {
-    onPressed();
-    if (controller.isCompleted) {
-      controller.reverse();
-    } else {
-      controller.forward();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
@@ -88,5 +79,14 @@ class _CharacterFavoriteIconState extends State<CharacterFavoriteIcon>
         color: context.colors.primary,
       ),
     );
+  }
+
+  void handleFavorite() {
+    onPressed();
+    if (controller.isCompleted) {
+      controller.reverse();
+    } else {
+      controller.forward();
+    }
   }
 }

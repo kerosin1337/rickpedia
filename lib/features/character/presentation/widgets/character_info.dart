@@ -49,56 +49,64 @@ class _CharacterInfoState extends State<CharacterInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [header, body],
           ),
-          headerBuilder: (context, _) => GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => handleExpand(isExpanded),
-            child: Row(
-              spacing: 16,
-              children: [
-                Text(
-                  'Character info',
-                  style: TextStyle(fontSize: 18, color: context.colors.primary),
-                ),
-                ExpandIcon(
-                  padding: EdgeInsets.zero,
-                  isExpanded: isExpanded,
-                  color: context.colors.primary,
-                  size: 28,
-                  onPressed: handleExpand,
-                ),
-              ],
-            ),
-          ),
-          bodyBuilder: (context, _) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 4,
-              children: infos
-                  .map(
-                    (info) => RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: '${info.$1}: ',
-                            style: TextStyle(color: context.colors.primary),
-                          ),
-                          TextSpan(
-                            text: info.$2,
-                            style: TextStyle(
-                              color: context.colors.secondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
+          headerBuilder: headerBuilder,
+          bodyBuilder: bodyBuilder,
           controller: expansibleController,
         ),
+      ),
+    );
+  }
+
+  Widget headerBuilder(BuildContext context, Animation<double> animation) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => handleExpand(isExpanded),
+      child: Row(
+        spacing: 16,
+        children: [
+          Text(
+            'Character info',
+            style: TextStyle(fontSize: 18, color: context.colors.primary),
+          ),
+          ExpandIcon(
+            padding: EdgeInsets.zero,
+            isExpanded: isExpanded,
+            color: context.colors.primary,
+            size: 28,
+            onPressed: handleExpand,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget bodyBuilder(BuildContext context, Animation<double> animation) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 4,
+        children: infos
+            .map(
+              (info) => RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${info.$1}: ',
+                      style: TextStyle(color: context.colors.primary),
+                    ),
+                    TextSpan(
+                      text: info.$2,
+                      style: TextStyle(
+                        color: context.colors.secondary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }

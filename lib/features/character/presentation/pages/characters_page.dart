@@ -22,17 +22,6 @@ class _CharactersPageState extends State<CharactersPage> {
     characterBloc = context.read<CharacterBloc>();
   }
 
-  void handleNextPage() {
-    characterBloc.add(CharactersGetEvent());
-  }
-
-  Future<void> handleRefresh() async {
-    characterBloc.add(CharactersGetEvent(initial: true));
-    await characterBloc.stream.firstWhere(
-      (state) => state.status == BlocStatus.success,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -51,6 +40,17 @@ class _CharactersPageState extends State<CharactersPage> {
           );
         },
       ),
+    );
+  }
+
+  void handleNextPage() {
+    characterBloc.add(CharactersGetEvent());
+  }
+
+  Future<void> handleRefresh() async {
+    characterBloc.add(CharactersGetEvent(initial: true));
+    await characterBloc.stream.firstWhere(
+      (state) => state.status == BlocStatus.success,
     );
   }
 }
