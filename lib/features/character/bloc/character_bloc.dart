@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/core/bloc/common.dart';
-import '../data/models/character_model.dart';
-import '../data/repository/character_repository.dart';
+import '/features/character/data/models/character_model.dart';
+import '/features/character/data/repository/character_repository.dart';
 
 part 'character_event.dart';
 part 'character_state.dart';
@@ -27,12 +27,27 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   ) async {
     try {
       if (event.initial) {
-        emit(state.copyWith(status: BlocStatus.initial));
+        emit(
+          CharacterState(
+            favoriteDirection: state.favoriteDirection,
+            favoriteItems: state.favoriteItems,
+          ),
+        );
       }
-
-      final characters = await characterRepository.getCharacters();
-
-      emit(state.copyWith(status: BlocStatus.success, items: characters));
+      if (state.hasReachedMax || state.status == BlocStatus.loading) return;
+      if (!event.initial) {
+        emit(state.copyWith(status: BlocStatus.loading));
+      }
+      final response = await characterRepository.getCharacters(state.page);
+      final character = response.items;
+      emit(
+        state.copyWith(
+          status: BlocStatus.success,
+          items: event.initial ? character : [...state.items, ...character],
+          page: state.page + 1,
+          hasReachedMax: response.hasReachedMax,
+        ),
+      );
       add(FavoriteCharactersGetAllEvent());
     } catch (_) {
       emit(state.copyWith(status: BlocStatus.failure));
@@ -71,15 +86,16 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
                   CharacterModel.fromJson(jsonDecode(prefs.getString(key)!)),
             )
             .toList()
-          ..sort((a, b) => state.favoriteDirection * a.name.compareTo(b.name));
+          ..sort(
+            (a, b) =>
+                state.favoriteDirection.direction * a.name.compareTo(b.name),
+          );
+    final favoriteIds = favorites.map((item) => item.id);
     emit(
       state.copyWith(
         favoriteItems: favorites,
         items: state.items
-            .map(
-              (item) =>
-                  item..isFavorite = favorites.any((fav) => fav.id == item.id),
-            )
+            .map((item) => item..isFavorite = favoriteIds.contains(item.id))
             .toList(),
       ),
     );
@@ -89,7 +105,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     FavoriteCharactersChangeSortEvent event,
     Emitter<CharacterState> emit,
   ) async {
-    emit(state.copyWith(favoriteDirection: -state.favoriteDirection));
+    emit(state.copyWith(favoriteDirection: state.favoriteDirection.reversed));
     add(FavoriteCharactersGetAllEvent());
   }
 }

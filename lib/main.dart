@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/api/dio_client.dart';
 import 'features/character/bloc/character_bloc.dart';
 import 'features/character/data/repository/character_repository.dart';
+import 'features/main/cubit/main_cubit.dart';
 import 'features/main/presentation/pages/main_page.dart';
 import 'shared/theme/theme.dart';
 
@@ -23,12 +24,19 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CharacterBloc(CharacterRepository(dioClient)),
         ),
+        BlocProvider(create: (context) => MainCubit()),
       ],
-      child: MaterialApp(
-        title: 'RickPedia',
-        debugShowCheckedModeBanner: false,
-        theme: theme,
-        home: const MainPage(),
+      child: BlocBuilder<MainCubit, MainState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'RickPedia',
+            debugShowCheckedModeBanner: false,
+            theme: getTheme(Brightness.light),
+            darkTheme: getTheme(Brightness.dark),
+            themeMode: state.themeMode,
+            home: const MainPage(),
+          );
+        },
       ),
     );
   }

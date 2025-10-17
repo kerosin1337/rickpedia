@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../character/bloc/character_bloc.dart';
-import '../../../character/presentation/pages/characters_page.dart';
-import '../../../character/presentation/pages/favorite_characters_page.dart';
+import '/features/character/bloc/character_bloc.dart';
+import '/features/character/presentation/pages/characters_page.dart';
+import '/features/character/presentation/pages/favorite_characters_page.dart';
+import '/features/main/presentation/widgets/favorite_sort_button.dart';
+import '/features/main/presentation/widgets/theme_switch.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,18 +15,18 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
 
   late final CharacterBloc characterBloc;
 
-  final List<Widget> _screens = [
+  final List<Widget> screens = [
     const CharactersPage(),
     const FavoriteCharactersPage(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
@@ -37,29 +39,20 @@ class _MainPageState extends State<MainPage> {
       ..add(FavoriteCharactersGetAllEvent());
   }
 
+  List<Widget>? get appBarActions {
+    return [
+      if (selectedIndex == 1)
+        const FavoriteSortButton()
+      else
+        const ThemeSwitch(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('RickPedia'),
-        actions: _selectedIndex == 1
-            ? [
-                BlocBuilder<CharacterBloc, CharacterState>(
-                  buildWhen: (previous, current) => true,
-                  builder: (context, state) {
-                    return IconButton(
-                      onPressed: () {
-                        characterBloc.add(FavoriteCharactersChangeSortEvent());
-                      },
-                      icon: const Icon(Icons.sort),
-                    );
-                  },
-                ),
-                const SizedBox(width: 16),
-              ]
-            : null,
-      ),
-      body: _screens[_selectedIndex],
+      appBar: AppBar(title: const Text('RickPedia'), actions: appBarActions),
+      body: screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -73,7 +66,7 @@ class _MainPageState extends State<MainPage> {
             activeIcon: Icon(Icons.favorite),
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 12,
       ),

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../../shared/constants/duration.dart';
-import '../../shared/constants/url.dart';
+import '/shared/constants/duration.dart';
+import '/shared/constants/url.dart';
 import 'interceptors/auth_interceptor.dart';
 
 Dio _defaultDio = Dio(

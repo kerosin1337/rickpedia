@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/bloc/common.dart';
-import '../../bloc/character_bloc.dart';
-import '../widgets/character_card.dart';
+import '/core/bloc/common.dart';
+import '/features/character/bloc/character_bloc.dart';
+import '/features/character/presentation/widgets/character_card.dart';
+import '/shared/components/custom_grid_view.dart';
 
 class CharactersPage extends StatefulWidget {
   const CharactersPage({super.key});
@@ -21,30 +22,32 @@ class _CharactersPageState extends State<CharactersPage> {
     characterBloc = context.read<CharacterBloc>();
   }
 
+  void handleNextPage() {
+    characterBloc.add(CharactersGetEvent());
+  }
+
+  Future<void> handleRefresh() async {
+    characterBloc.add(CharactersGetEvent(initial: true));
+    await characterBloc.stream.firstWhere(
+      (state) => state.status == BlocStatus.success,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
-        characterBloc.add(CharactersGetEvent(initial: true));
-      },
+      onRefresh: handleRefresh,
       child: BlocBuilder<CharacterBloc, CharacterState>(
         builder: (context, state) {
           if (state.status == BlocStatus.initial) {
             return const Center(child: CircularProgressIndicator());
           }
-          return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-            ),
-            padding: const EdgeInsets.all(16),
-            shrinkWrap: true,
-            itemCount: state.items.length,
-            itemBuilder: (context, index) {
-              final character = state.items[index];
+          return CustomGridView(
+            items: state.items,
+            renderComponent: (character, index) {
               return CharacterCard(character: character);
             },
+            onNextPage: handleNextPage,
           );
         },
       ),

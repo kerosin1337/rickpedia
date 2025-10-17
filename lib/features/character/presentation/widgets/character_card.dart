@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/extension/context_ext.dart';
-import '../../../../shared/components/network_image_with_placeholder.dart';
-import '../../bloc/character_bloc.dart';
-import '../../data/models/character_model.dart';
+import '/core/extension/context_ext.dart';
+import '/features/character/bloc/character_bloc.dart';
+import '/features/character/data/models/character_model.dart';
+import '/shared/components/network_image_with_placeholder.dart';
+import '/shared/components/text_with_shadow.dart';
+import 'character_favorite_icon.dart';
 import 'character_info.dart';
 
 class CharacterCard extends StatefulWidget {
@@ -27,6 +29,17 @@ class _CharacterCardState extends State<CharacterCard> {
     characterBloc = context.read<CharacterBloc>();
   }
 
+  void handleFavorite() {
+    characterBloc.add(
+      character.isFavorite
+          ? FavoriteCharactersRemoveEvent(key: character.id.toString())
+          : FavoriteCharactersAddEvent(
+              key: character.id.toString(),
+              value: character.toJson(),
+            ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -38,32 +51,9 @@ class _CharacterCardState extends State<CharacterCard> {
           Positioned(
             right: 8,
             top: 8,
-            child: IconButton(
-              onPressed: () async {
-                characterBloc.add(
-                  character.isFavorite
-                      ? FavoriteCharactersRemoveEvent(
-                          key: character.id.toString(),
-                        )
-                      : FavoriteCharactersAddEvent(
-                          key: character.id.toString(),
-                          value: character.toJson(),
-                        ),
-                );
-              },
-              visualDensity: VisualDensity.comfortable,
-              iconSize: 32,
-              icon: Icon(
-                character.isFavorite ? Icons.star : Icons.star_outline,
-                shadows: [
-                  Shadow(
-                    offset: const Offset(1, 1),
-                    blurRadius: 4,
-                    color: context.colors.shadow.withAlpha((255 * 0.3).toInt()),
-                  ),
-                ],
-              ),
-              color: context.colors.primary,
+            child: CharacterFavoriteIcon(
+              isFavorite: character.isFavorite,
+              onPressed: handleFavorite,
             ),
           ),
           Positioned(
@@ -75,24 +65,9 @@ class _CharacterCardState extends State<CharacterCard> {
             bottom: 16,
             left: 16,
             right: 16,
-            child: Text(
+            child: TextWithShadow(
               character.name,
-              style: TextStyle(
-                color: context.colors.primary,
-                fontSize: 24,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: const Offset(1, 1),
-                    blurRadius: 8,
-                    color: context.colors.shadow,
-                  ),
-                  Shadow(
-                    offset: const Offset(-1, -1),
-                    blurRadius: 8,
-                    color: context.colors.shadow,
-                  ),
-                ],
-              ),
+              style: TextStyle(color: context.colors.background, fontSize: 24),
             ),
           ),
         ],
