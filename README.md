@@ -1,16 +1,47 @@
-# rickpedia
+# RickPedia
 
-Rickpedia
+RickPedia — мобильное приложение на Flutter, в котором можно просматривать карточки персонажей из
+вселенной Rick and Morty с изображением и подробной информацией. Пользователи могут добавлять
+понравившихся персонажей в избранное.
 
-## Getting Started
+## Возможности приложения
 
-This project is a starting point for a Flutter application.
+* Просмотр карточек персонажей с изображениями.
+* Просмотр информации о персонажах (имя, статус, раса и т.д.).
+* Добавление и удаление персонажей из избранного.
+* Поддержка Android и iOS.
 
-A few resources to get you started if this is your first Flutter project:
+## Установка и запуск
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. **Клонировать репозиторий**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+git clone https://github.com/kerosin1337/rickpedia.git
+cd rickpedia
+```
+
+2. **Установить зависимости**
+
+```bash
+flutter pub get
+```
+
+3. **Запуск приложения на эмуляторе или устройстве**
+
+```bash
+flutter run
+```
+
+> Примечание: приложение поддерживает только платформы Android и iOS.
+
+## Используемые версии
+
+* **Flutter SDK**: 3.32.8
+* **Dart SDK**: 3.8.1
+* **DevTools**: 2.45.1
+* **Зависимости**:
+
+    * `flutter_bloc: ^9.1.1`
+    * `dio: ^5.9.0`
+    * `cached_network_image: ^3.4.1`
+    * `shared_preferences: ^2.5.3`
